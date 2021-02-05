@@ -1,3 +1,5 @@
+config.assets.paths << Rails.root.join('node_modules')
+
 require_relative 'boot'
 
 require 'rails/all'
