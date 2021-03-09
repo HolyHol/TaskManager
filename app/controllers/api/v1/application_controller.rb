@@ -1,4 +1,4 @@
-class Api::V1::ApplicationController < ApplicationController
+class Api::V1::ApplicationController < Api::ApplicationController
   RANSACK_DEFAULT_SORT = 'id ASC'
 
   def build_meta(collection)
@@ -10,17 +10,21 @@ class Api::V1::ApplicationController < ApplicationController
       per_page: collection.limit_value
     }
   end
-  
+
   def ransack_params
     params.to_unsafe_h.fetch(:q, { s: RANSACK_DEFAULT_SORT })
   end
-  
+
   def page
     params.fetch(:page, 1)
   end
-  
+
   def per_page
     per = params.fetch(:per, 10).to_i
     per > 100 ? 100 : per
+  end
+
+  def self.responder
+    JsonResponder
   end
 end
