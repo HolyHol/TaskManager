@@ -1,4 +1,5 @@
-class Task < ApplicationRecord
+class Task < ActiveRecord::Base
+
   belongs_to :author, class_name: 'User'
   belongs_to :assignee, class_name: 'User', optional: true
 
@@ -11,7 +12,7 @@ class Task < ApplicationRecord
     event :start_doing do
       transition [:new_task, :in_qa, :in_code_review] => :in_development
     end
-    event :archive do
+    event :archived do
       transition [:new_task, :released] => :archived
     end
     event :to_in_qa do
