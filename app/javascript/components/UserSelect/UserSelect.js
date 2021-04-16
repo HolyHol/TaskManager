@@ -8,7 +8,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 
 import UsersRepository from 'repositories/UsersRepository';
-import UserPresenter from 'presenter/UserPresenter';
+import UserPresenter from 'presenters/UserPresenter';
 
 import useStyles from './useStyles';
 

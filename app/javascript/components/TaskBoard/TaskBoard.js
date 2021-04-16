@@ -49,6 +49,21 @@ const TaskBoard = () => {
   useEffect(() => loadBoard(), []);
   useEffect(() => generateBoard(), [boardCards]);
   
+  const generateBoard = () => {
+    const board = {
+      columns: STATES.map(({ key, value }) => {
+        return {
+          id: key,
+          title: value,
+          cards: propOr({}, 'cards', boardCards[key]),
+          meta: propOr({}, 'meta', boardCards[key]),
+        }
+      })
+    }
+
+    setBoard(board);
+  }
+
 
   const loadColumn = (state, page, perPage) => {
     return TasksRepository.index({
@@ -68,21 +83,6 @@ const TaskBoard = () => {
       });
     });
   };
-
-  const generateBoard = () => {
-    const board = {
-      columns: STATES.map(({ key, value }) => {
-        return {
-          id: key,
-          title: value,
-          cards: propOr({}, 'cards', boardCards[key]),
-          meta: propOr({}, 'meta', boardCards[key]),
-        }
-      })
-    }
-
-    setBoard(board);
-  }
 
   const loadBoard = () => {
     STATES.map(({ key }) => loadColumnInitial(key));
