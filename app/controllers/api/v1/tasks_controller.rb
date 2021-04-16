@@ -18,11 +18,7 @@ class Api::V1::TasksController < Api::V1::ApplicationController
   def create
     task = current_user.my_tasks.new(task_params)
     task.author = current_user
-    if task.save
-      return respond_with(task, serializer: TaskSerializer, location: nil)
-    end
-
-    head(:bad_request)
+    task.save
 
     respond_with(task, serializer: TaskSerializer, location: nil)
   end
