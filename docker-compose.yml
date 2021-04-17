@@ -1,6 +1,17 @@
 version: '3.7'
 
 services:
+  ci:
+    build: .
+    depends_on:
+      - db
+    environment:
+      - COVERAGE
+      - RAILS_ENV
+      - DATABASE_HOST=db
+      - DATABASE_USERNAME=postgres
+    command: sh -c "bundle exec rails webpacker:install; bundle exec rails db:create db:migrate; bundle exec rake test"
+
   web:
     build: .
     volumes: &web-volumes
@@ -32,18 +43,6 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-
-  ci:
-    build: .
-    depends_on:
-      - db
-    environment:
-      - COVERAGE
-      - RAILS_ENV
-      - DATABASE_HOST=db
-      - DATABASE_USERNAME=postgres
-    command: sh -c "bundle exec rails webpacker:install; bundle exec rails db:create db:migrate; bundle exec rake test"
-
 
 volumes:
   bundle_cache:
