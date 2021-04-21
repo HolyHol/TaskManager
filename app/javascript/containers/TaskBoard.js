@@ -8,8 +8,9 @@ import Task from 'components/Task';
 import AddPopup from 'components/AddPopup';
 import EditPopup from 'components/EditPopup';
 import ColumnHeader from 'components/ColumnHeader';
-import TasksRepository from 'repositories/TasksRepository'; // ??
-import TaskForm from 'forms/TaskForm'; // ??
+import TasksRepository from 'repositories/TasksRepository';
+import TaskPresenter from 'presenters/TaskPresenter';
+import TaskForm from 'forms/TaskForm';
 
 import useTasks from 'hooks/store/useTasks';
 
@@ -17,32 +18,29 @@ import useStyles from './useStyles';
 
 const MODES = {
   ADD: 'add',
-  NONE: 'none',
   EDIT: 'edit',
 };
 
 const TaskBoard = () => {
   const { board, loadBoard } = useTasks();
-  const [mode, setMode] = useState(MODES.NONE);
+  const [mode, setMode] = useState(MODES);
   const [openedTaskId, setOpenedTaskId] = useState(null);
+  const setBoardCards = useState({});
   const styles = useStyles();
   useEffect(() => loadBoard(), []);
 
-  const handleOpenAddPopup = () => {
-    setMode(MODES.ADD);
-  };
+  const handleOpenAddPopup = () => setMode(MODES.ADD);
 
   const handleOpenEditPopup = (task) => {
-    setOpenedTaskId(task.id);
+    setOpenedTaskId(TaskPresenter.id(task));
     setMode(MODES.EDIT);
   };
 
   const handleClose = () => {
-    setMode(MODES.NONE);
+    setMode(MODES);
     setOpenedTaskId(null);
   };
 
-  
   const loadColumnMore = (state, page = 1, perPage = 10) => {
     loadBoard(state, page, perPage).then(({ data }) => {
       setBoardCards((prevState) => {
@@ -60,45 +58,39 @@ const TaskBoard = () => {
     if (!transition) {
       return null;
     }
-  
-    return TasksRepository.update(task.id, { stateEvent: transition.event })
+
+    return TasksRepository.update(TaskPresenter.id(task), { stateEvent: transition.event })
       .then(() => {
         loadBoard(destination.toColumnId);
         loadBoard(source.fromColumnId);
       })
-      .catch((error) => {
-        alert(`Move failed! ${error.message}`);
-      });
+      .catch((error) => alert(`Move failed! ${error.message}`));
   };
 
   const handleTaskCreate = (params) => {
     const attributes = TaskForm.attributesToSubmit(params);
     return TasksRepository.create(attributes).then(({ data: { task } }) => {
-      loadBoard(task.state);
+      loadBoard(TaskPresenter.state(task));
       handleClose();
     });
   };
 
-  const handleTaskLoad = (id) => { 
-    return TasksRepository.show(id).then(({ data: { task } }) => task);
-  };
+  const handleTaskLoad = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
 
   const handleTaskUpdate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
 
-    return TasksRepository.update(task.id, attributes).then(() => {
-      loadBoard(task.state);
+    return TasksRepository.update(TaskPresenter.id(task), attributes).then(() => {
+      loadBoard(TaskPresenter.state(task));
       handleClose();
     });
   };
-//
 
-  const handleTaskDestroy = (task) => {
-    return TasksRepository.destroy(task.id).then(() => {
-      loadBoard(task.state);
+  const handleTaskDestroy = (task) =>
+    TasksRepository.destroy(TaskPresenter.id(task)).then(() => {
+      loadBoard(TaskPresenter.state(task));
       handleClose();
     });
-  };
 
   return (
     <>

@@ -4,16 +4,15 @@ import { has } from 'ramda';
 
 import TextField from '@material-ui/core/TextField';
 
-import UserSelect from 'components/UserSelect'
+import UserSelect from 'components/UserSelect';
 import TaskPresenter from 'presenters/TaskPresenter';
 
 import useStyles from './useStyles';
 
 const Form = ({ errors, onChange, task }) => {
   const handleChangeTextField = (fieldName) => (event) => onChange({ ...task, [fieldName]: event.target.value });
-  const handleChangeSelect = fieldName => user => onChange({ ...task, [fieldName]: user });
+  const handleChangeSelect = (fieldName) => (user) => onChange({ ...task, [fieldName]: user });
   const styles = useStyles();
-  
 
   return (
     <form className={styles.root}>

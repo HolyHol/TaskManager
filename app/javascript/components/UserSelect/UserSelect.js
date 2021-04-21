@@ -15,7 +15,7 @@ import useStyles from './useStyles';
 const UserSelect = ({ error, label, isClearable, isDisabled, isRequired, onChange, value, helperText }) => {
   const [isFocused, setFocus] = useState(false);
   const styles = useStyles();
-  const handleLoadOptions = inputValue =>
+  const handleLoadOptions = (inputValue) =>
     UsersRepository.index({ q: { firstNameOrLastNameCont: inputValue } }).then(({ data }) => data.items);
 
   return (
@@ -36,7 +36,7 @@ const UserSelect = ({ error, label, isClearable, isDisabled, isRequired, onChang
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             menuPortalTarget={document.body}
-            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+            styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
           />
         </div>
         {helperText && <FormHelperText>{helperText}</FormHelperText>}
@@ -54,6 +54,16 @@ UserSelect.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.shape(),
   helperText: PropTypes.string,
+};
+
+UserSelect.defaultProps = {
+  error: false,
+  isClearable: true,
+  isDisabled: false,
+  isRequired: false,
+  onChange: {},
+  value: {},
+  helperText: '',
 };
 
 export default UserSelect;
