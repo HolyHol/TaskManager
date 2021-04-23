@@ -27,7 +27,7 @@ const TaskBoard = () => {
   const [openedTaskId, setOpenedTaskId] = useState(null);
   const setBoardCards = useState({});
   const styles = useStyles();
-  useEffect(() => loadBoard(), []);
+  useEffect(loadBoard, []);
 
   const handleOpenAddPopup = () => setMode(MODES.ADD);
 
