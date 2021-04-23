@@ -12,7 +12,7 @@ class Task < ActiveRecord::Base
     event :start_doing do
       transition [:new_task, :in_qa, :in_code_review] => :in_development
     end
-    event :archived do
+    event :archive do
       transition [:new_task, :released] => :archived
     end
     event :to_in_qa do

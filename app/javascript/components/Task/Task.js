@@ -14,11 +14,12 @@ const Task = ({ task, onClick }) => {
   const styles = useStyles();
 
   const handleClick = () => onClick(task);
-    const action = (
-      <IconButton onClick={handleClick}>
-        <EditIcon />
-      </IconButton>
-    );
+
+  const action = (
+    <IconButton onClick={handleClick}>
+      <EditIcon />
+    </IconButton>
+  );
 
   return (
     <Card className={styles.root}>

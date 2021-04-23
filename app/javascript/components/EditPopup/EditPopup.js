@@ -14,7 +14,6 @@ import Modal from '@material-ui/core/Modal';
 
 import Form from 'components/Form';
 
-
 import useStyles from './useStyles';
 
 const EditPopup = ({ cardId, onClose, onDestroyCard, onLoadCard, onUpdateCard }) => {

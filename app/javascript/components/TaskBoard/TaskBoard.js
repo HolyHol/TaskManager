@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import KanbanBoard from '@lourenci/react-kanban';
 import { propOr } from 'ramda';
 
-
 import Task from 'components/Task';
 import ColumnHeader from 'components/ColumnHeader/';
 import TasksRepository from 'repositories/TasksRepository';
@@ -32,12 +31,12 @@ const MODES = {
 };
 
 const initialBoard = {
-  columns: STATES.map(column => ({
+  columns: STATES.map((column) => ({
     id: column.key,
     title: column.value,
     cards: [],
     meta: {},
-  }))
+  })),
 };
 
 const TaskBoard = () => {
@@ -46,12 +45,24 @@ const TaskBoard = () => {
   const [board, setBoard] = useState(initialBoard);
   const [boardCards, setBoardCards] = useState({});
   const [openedTaskId, setOpenedTaskId] = useState(null);
-  useEffect(() => loadBoard(), []);
+
+  const generateBoard = () => {
+    const newBoard = {
+      columns: STATES.map(({ key, value }) => ({
+        id: key,
+        title: value,
+        cards: propOr({}, 'cards', boardCards[key]),
+        meta: propOr({}, 'meta', boardCards[key]),
+      })),
+    };
+
+    setBoard(newBoard);
+  };
+
   useEffect(() => generateBoard(), [boardCards]);
-  
 
   const loadColumn = (state, page, perPage) => {
-    return TasksRepository.index({
+    TasksRepository.index({
       q: { stateEq: state },
       page,
       perPage,
@@ -60,33 +71,18 @@ const TaskBoard = () => {
 
   const loadColumnInitial = (state, page = 1, perPage = 10) => {
     loadColumn(state, page, perPage).then(({ data }) => {
-      setBoardCards((prevState) => {
-        return {
-          ...prevState,
-          [state]: { cards: data.items, meta: data.meta },
-        };
-      });
+      setBoardCards((prevState) => ({
+        ...prevState,
+        [state]: { cards: data.items, meta: data.meta },
+      }));
     });
   };
-
-  const generateBoard = () => {
-    const board = {
-      columns: STATES.map(({ key, value }) => {
-        return {
-          id: key,
-          title: value,
-          cards: propOr({}, 'cards', boardCards[key]),
-          meta: propOr({}, 'meta', boardCards[key]),
-        }
-      })
-    }
-
-    setBoard(board);
-  }
 
   const loadBoard = () => {
     STATES.map(({ key }) => loadColumnInitial(key));
   };
+
+  useEffect(() => loadBoard(), []);
 
   const loadColumnMore = (state, page = 1, perPage = 10) => {
     loadColumn(state, page, perPage).then(({ data }) => {
@@ -105,7 +101,7 @@ const TaskBoard = () => {
     if (!transition) {
       return null;
     }
-  
+
     return TasksRepository.update(task.id, { stateEvent: transition.event })
       .then(() => {
         loadColumnInitial(destination.toColumnId);
@@ -119,17 +115,16 @@ const TaskBoard = () => {
   const handleOpenAddPopup = () => {
     setMode(MODES.ADD);
   };
-  
+
   const handleClose = () => {
     setMode(MODES.NONE);
     setOpenedTaskId(null);
   };
-  
+
   const handleOpenEditPopup = (task) => {
     setOpenedTaskId(task.id);
     setMode(MODES.EDIT);
   };
-
 
   const handleTaskCreate = (params) => {
     const attributes = TaskForm.attributesToSubmit(params);
@@ -139,9 +134,7 @@ const TaskBoard = () => {
     });
   };
 
-  const loadTask = (id) => {
-    return TasksRepository.show(id).then(({ data: { task } }) => task);
-  };
+  const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
 
   const handleTaskUpdate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
@@ -152,12 +145,11 @@ const TaskBoard = () => {
     });
   };
 
-  const handleTaskDestroy = (task) => {
-    return TasksRepository.destroy(task.id).then(() => {
+  const handleTaskDestroy = (task) =>
+    TasksRepository.destroy(task.id).then(() => {
       loadColumnInitial(task.state);
       handleClose();
     });
-  };
 
   return (
     <>
