@@ -39,6 +39,7 @@ gem 'js-routes'
 gem 'simplecov', require: false, group: :test
 gem 'coveralls', require: false
 gem 'bullet', group: 'development'
+gem 'rollbar'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
