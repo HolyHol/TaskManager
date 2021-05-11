@@ -1,2 +1,6 @@
-= render layout: 'mailer'
-  | Task #{@task.id} was updated  
+= render layout: 'base_mail'
+  |
+  -if @task.present?
+    Task #{@task.id} was updated 
+  -else
+    p You did't updated a any tasks

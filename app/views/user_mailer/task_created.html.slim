@@ -1,2 +1,6 @@
 = render layout: 'base_mail'
-  | Task #{@task.id} was created 
+  |
+  -if @task.present?
+    Task #{@task.id} was created 
+  -else
+    p You did't updated a any tasks
