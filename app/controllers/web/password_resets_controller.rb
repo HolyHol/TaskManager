@@ -6,11 +6,10 @@ class Web::PasswordResetsController < Web::ApplicationController
   def create
     @user = User.find_by(email: params[:user_email_form][:email])
 
-    @token = SecureRandom.hex(10)
     @token_created_at = Time.current
 
     if @user.password_reset
-      @user.password_reset.update(token: @token, token_created_at: @token_created_at)
+      @user.password_reset.regenerate_token.update(token_created_at: @token_created_at)
     else
       @password_reset = @user.create_password_reset(token: @token, token_created_at: @token_created_at)
     end
