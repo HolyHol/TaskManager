@@ -15,7 +15,7 @@ class Web::PasswordResetsController < Web::ApplicationController
       @password_reset = @user.create_password_reset(token: @token, token_created_at: @token_created_at)
     end
 
-    PasswordResetMailer.with(user: @user).password_reset.deliver_now
+    PasswordResetMailer.with(user: @user).password_reset.deliver_later
     redirect_to(new_session_url)
   end
 
