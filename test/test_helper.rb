@@ -3,6 +3,8 @@ require_relative '../config/environment'
 require 'rails/test_help'
 require 'sidekiq/testing'
 
+Sidekiq::Testing.inline!
+
 require 'simplecov'
 SimpleCov.start
 
