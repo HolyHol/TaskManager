@@ -11,4 +11,5 @@ Coveralls.wear!
 class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
   include AuthHelper
+  include ActionMailer::TestHelper
 end

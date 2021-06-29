@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   root :to => "web/boards#show"
 
   namespace :admin do
@@ -9,6 +10,7 @@ Rails.application.routes.draw do
     resource :board, only: :show
     resource :session, only: [:new, :create, :destroy]
     resources :developers, only: [:new, :create]
+    resource :password_reset, only: [:new, :create, :edit, :update]
   end
 
   namespace :api, defaults: { format: 'json' } do

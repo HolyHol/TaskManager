@@ -1,0 +1,6 @@
+= render layout: 'base_mail'
+  |
+  -if @task.present?
+    Task #{@task.id} was deleted 
+  -else
+    p You did't deleted a any tasks

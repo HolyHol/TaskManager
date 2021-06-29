@@ -39,6 +39,8 @@ gem 'js-routes'
 gem 'simplecov', require: false, group: :test
 gem 'coveralls', require: false
 gem 'bullet', group: 'development'
+gem 'rollbar'
+gem 'newrelic_rpm'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -51,6 +53,8 @@ group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '~> 3.2'
   gem 'web-console', '>= 3.3.0'
+  gem 'letter_opener'
+  gem 'letter_opener_web'
 end
 
 group :test do
