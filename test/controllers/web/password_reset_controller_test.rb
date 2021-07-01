@@ -40,5 +40,4 @@ class Web::PasswordResetsControllerTest < ActionController::TestCase
     user_params = { confirmation: user.password, password: user.password }
     patch :update, params: { user: user_params, token: password_reset.token }
   end
-
 end
