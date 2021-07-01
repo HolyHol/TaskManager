@@ -5,12 +5,14 @@ services:
     build: .
     depends_on:
       - db
+      - redis
     environment:
       - COVERAGE
       - RAILS_ENV
       - DATABASE_HOST=db
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
+      - REDIS_URL=redis://redis
     command: sh -c "bundle exec rails webpacker:install; bundle exec rails db:create db:migrate; bundle exec rake test"
 
   web:
