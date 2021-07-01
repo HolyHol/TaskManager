@@ -1,8 +1,9 @@
 name: Main
 
 on:
-  pull_request
-  
+  pull_request:
+    branches:
+      - 'develop'
   push:
     branches:
       - 'develop'
